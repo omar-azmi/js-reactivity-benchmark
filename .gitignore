@@ -1,6 +1,21 @@
-node_modules/
+# microsoft office temporary files
+*.tmp
+~$*.docx
+~$*.xlsx
+*.xlk
+~$*.pptx
+*.~vsd*
+
+# distribution builds and documentation builds
 dist/
-.DS_Store
-chrome/
 public/dist/
-isolates-*
+/docs/
+node_modules/
+/npm/
+/temp/
+/package.json
+/tsconfig.json
+
+# version lock files
+# /deno.lock
+# /deno.d.ts

@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    // common typo spell checker.
+    "tekumara.typos-vscode",
+    // deno lsp for typescript.
+    "denoland.vscode-deno"
+  ]
+}
