@@ -101,6 +101,9 @@
     "install": true
   },
   "tasks": {
+    "run-benchmark": {
+      "command": "deno run --allow-env=NODE_ENV \"./scripts/run_benchmark.ts\""
+    },
     "build-dist": {
       "command": "deno run -A \"jsr:@oazmi/build-tools@0.3.0/cli/dist\" --config=\"./deno.json\"",
       "description": "transpiles the library to minified esm-distributable javascript multi-entry source code.\nuses the `buildDist` field in `deno.json` for configuration.\ndepends on `npm:esbuild` and `jsr:@oazmi/build-tools`."
