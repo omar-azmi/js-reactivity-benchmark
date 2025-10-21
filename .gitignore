@@ -10,6 +10,7 @@
 dist/
 public/dist/
 /docs/
+/web-dist/
 node_modules/
 /npm/
 /temp/
