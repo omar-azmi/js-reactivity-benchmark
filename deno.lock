@@ -2,6 +2,8 @@
   "version": "5",
   "specifiers": {
     "jsr:@oazmi/kitchensink@0.9.14": "0.9.14",
+    "jsr:@std/assert@^1.0.15": "1.0.15",
+    "jsr:@std/internal@^1.0.12": "1.0.12",
     "npm:@amadeus-it-group/tansu@2": "2.0.0",
     "npm:@angular/core@^20.3.6": "20.3.6_rxjs@7.8.2",
     "npm:@preact/signals@^2.3.2": "2.3.2_preact@10.27.0",
@@ -25,6 +27,15 @@
   "jsr": {
     "@oazmi/kitchensink@0.9.14": {
       "integrity": "3510645cd38bfc03f391e64c2cafb075fbc33f334f8891f0498d95444878a11d"
+    },
+    "@std/assert@1.0.15": {
+      "integrity": "d64018e951dbdfab9777335ecdb000c0b4e3df036984083be219ce5941e4703b",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
+    "@std/internal@1.0.12": {
+      "integrity": "972a634fd5bc34b242024402972cd5143eac68d8dffaca5eaa4dba30ce17b027"
     }
   },
   "npm": {
@@ -947,6 +958,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@oazmi/kitchensink@0.9.14",
+      "jsr:@std/assert@^1.0.15",
       "npm:@amadeus-it-group/tansu@2",
       "npm:@angular/core@^20.3.6",
       "npm:@preact/signals@^2.3.2",

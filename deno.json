@@ -16,6 +16,7 @@
     "@preact/signals": "npm:@preact/signals@^2.3.2",
     "@reactively/core": "npm:@reactively/core@^0.0.8",
     "@solidjs/signals": "npm:@solidjs/signals@^0.7.3",
+    "@std/assert": "jsr:@std/assert@^1.0.15",
     "@vue/reactivity": "npm:@vue/reactivity@^3.5.22",
     "alien-signals": "npm:alien-signals@^2.0.8",
     "compostate": "npm:compostate@^0.6.0-alpha.1",
@@ -35,6 +36,7 @@
     ".": "./src/index.ts"
   },
   "nodeModulesDir": "auto",
+  "test": { "include": ["./src/index.ts", "/src/**/*.test.ts"] },
   "fmt": {
     "useTabs": false,
     "indentWidth": 2,
@@ -99,24 +101,8 @@
     "install": true
   },
   "tasks": {
-    "build-pdf": {
-      "command": "typst compile \"./main.typ\" \"./main.pdf\"",
-      "description": "build a pdf file out of the main manuscript located at `./main.typ`"
-    },
     "build-dist": {
       "command": "deno run -A \"jsr:@oazmi/build-tools@0.3.0/cli/dist\" --config=\"./deno.json\"",
-      "description": "transpiles the library to minified esm-distributable javascript multi-entry source code.\nuses the `buildDist` field in `deno.json` for configuration.\ndepends on `npm:esbuild` and `jsr:@oazmi/build-tools`."
-    },
-    "build-framework": {
-      "command": "deno run -A \"jsr:@oazmi/build-tools@0.3.0/cli/dist\" --config=\"./deno.json\" --input=\"./src/framework.ts\"",
-      "description": "transpiles the library to minified esm-distributable javascript multi-entry source code.\nuses the `buildDist` field in `deno.json` for configuration.\ndepends on `npm:esbuild` and `jsr:@oazmi/build-tools`."
-    },
-    "build-test": {
-      "command": "deno run -A \"jsr:@oazmi/build-tools@0.3.0/cli/dist\" --config=\"./deno.json\" --no-split --input=\"./test/simple.test.ts\" --input=\"./test/simple2.test.ts\" --input=\"./test/debug.test.ts\" --input=\"./test/ideal.test.ts\"",
-      "description": "transpiles the library to minified esm-distributable javascript multi-entry source code.\nuses the `buildDist` field in `deno.json` for configuration.\ndepends on `npm:esbuild` and `jsr:@oazmi/build-tools`."
-    },
-    "build-test2": {
-      "command": "deno run -A \"jsr:@oazmi/build-tools@0.3.0/cli/dist\" --config=\"./deno.json\" --no-split --no-minify --input=\"./test/debug.test.ts\"",
       "description": "transpiles the library to minified esm-distributable javascript multi-entry source code.\nuses the `buildDist` field in `deno.json` for configuration.\ndepends on `npm:esbuild` and `jsr:@oazmi/build-tools`."
     },
     "build-docs": {
@@ -140,7 +126,7 @@
       "description": "clean the project by deleting known polutant files and directories."
     },
     "test": {
-      "command": "deno test -A",
+      "command": "deno test --no-check --allow-env",
       "description": "run typescript validity test on source code, and evaluate the unit tests in the `./test/` directory."
     },
     "test-doc": {

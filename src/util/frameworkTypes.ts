@@ -1,5 +1,5 @@
-import { TestResult } from "./perfTests";
-import { ReactiveFramework } from "./reactiveFramework";
+import type { TestResult } from "./perfTests.ts"
+import type { ReactiveFramework } from "./reactiveFramework.ts"
 
 /** Parameters for a running a performance benchmark test
  *
@@ -20,34 +20,34 @@ import { ReactiveFramework } from "./reactiveFramework";
  */
 export interface TestConfig {
   /** friendly name for the test, should be unique */
-  name?: string;
+  name?: string
 
   /** width of dependency graph to construct */
-  width: number;
+  width: number
 
   /** depth of dependency graph to construct */
-  totalLayers: number;
+  totalLayers: number
 
   /** fraction of nodes that are static */ // TODO change to dynamicFraction
-  staticFraction: number;
+  staticFraction: number
 
   /** construct a graph with number of sources in each node */
-  nSources: number;
+  nSources: number
 
   /** fraction of [0, 1] elements in the last layer from which to read values in each test iteration */
-  readFraction: number;
+  readFraction: number
 
   /** number of test iterations */
-  iterations: number;
+  iterations: number
 
   /** sum and count of all iterations, for verification */
-  expected: Partial<TestResult>;
+  expected: Partial<TestResult>
 }
 
 export interface FrameworkInfo {
   /** wrapper/adapter for a benchmarking a reactive framework */
-  framework: ReactiveFramework;
+  framework: ReactiveFramework
 
   /** verify the number of nodes executed matches the expected number */
-  testPullCounts?: boolean;
+  testPullCounts?: boolean
 }

@@ -1,21 +1,17 @@
-import { Counter } from "../../util/counter";
-import { TestConfig } from "../../util/frameworkTypes";
-import { pseudoRandom } from "../../util/pseudoRandom";
-import {
-  Computed,
-  ReactiveFramework,
-  Signal,
-} from "../../util/reactiveFramework";
+import { Counter } from "../../util/counter.ts"
+import type { TestConfig } from "../../util/frameworkTypes.ts"
+import { pseudoRandom } from "../../util/pseudoRandom.ts"
+import type { Computed, ReactiveFramework, Signal } from "../../util/reactiveFramework.ts"
 
 export interface Graph {
-  sources: Signal<number>[];
-  layers: Computed<number>[][];
-  readLeaves: Computed<number>[];
+  sources: Signal<number>[]
+  layers: Computed<number>[][]
+  readLeaves: Computed<number>[]
 }
 
 export interface GraphAndCounter {
-  graph: Graph;
-  counter: Counter;
+  graph: Graph
+  counter: Counter
 }
 
 /**
@@ -32,11 +28,11 @@ export function makeGraph(
   readFraction: number,
   config: TestConfig,
 ): GraphAndCounter {
-  const { width, totalLayers, staticFraction, nSources } = config;
+  const { width, totalLayers, staticFraction, nSources } = config
 
   return framework.withBuild(() => {
-    const sources = new Array(width).fill(0).map((_, i) => framework.signal(i));
-    const counter = new Counter();
+    const sources = new Array(width).fill(0).map((_, i) => framework.signal(i))
+    const counter = new Counter()
     const rows = makeDependentRows(
       sources,
       totalLayers - 1,
@@ -44,21 +40,21 @@ export function makeGraph(
       staticFraction,
       nSources,
       framework,
-    );
+    )
 
-    const rand = pseudoRandom();
-    const leaves = rows[rows.length - 1];
-    const skipCount = Math.round(leaves.length * (1 - readFraction));
-    const readLeaves = removeElems(leaves, skipCount, rand);
+    const rand = pseudoRandom()
+    const leaves = rows[rows.length - 1]
+    const skipCount = Math.round(leaves.length * (1 - readFraction))
+    const readLeaves = removeElems(leaves, skipCount, rand)
     framework.effect(() => {
       for (const leaf of readLeaves) {
-        leaf.read();
+        leaf.read()
       }
-    });
+    })
 
-    const graph = { sources, layers: rows, readLeaves };
-    return { graph, counter };
-  });
+    const graph = { sources, layers: rows, readLeaves }
+    return { graph, counter }
+  })
 }
 
 /**
@@ -71,29 +67,29 @@ export function runGraph(
   iterations: number,
   framework: ReactiveFramework,
 ): number {
-  const { sources, readLeaves } = graph;
+  const { sources, readLeaves } = graph
 
   for (let i = 0; i < iterations; i++) {
     framework.withBatch(() => {
-      const sourceDex = i % sources.length;
-      sources[sourceDex].write(i + sourceDex);
-    });
+      const sourceDex = i % sources.length
+      sources[sourceDex].write(i + sourceDex)
+    })
     for (const leaf of readLeaves) {
-      leaf.read();
+      leaf.read()
     }
   }
 
-  const sum = readLeaves.reduce((total, leaf) => leaf.read() + total, 0);
-  return sum;
+  const sum = readLeaves.reduce((total, leaf) => leaf.read() + total, 0)
+  return sum
 }
 
 function removeElems<T>(src: T[], rmCount: number, rand: () => number): T[] {
-  const copy = src.slice();
+  const copy = src.slice()
   for (let i = 0; i < rmCount; i++) {
-    const rmDex = Math.floor(rand() * copy.length);
-    copy.splice(rmDex, 1);
+    const rmDex = Math.floor(rand() * copy.length)
+    copy.splice(rmDex, 1)
   }
-  return copy;
+  return copy
 }
 
 function makeDependentRows(
@@ -104,9 +100,9 @@ function makeDependentRows(
   nSources: number,
   framework: ReactiveFramework,
 ): Computed<number>[][] {
-  let prevRow = sources;
-  const random = pseudoRandom();
-  const rows = [];
+  let prevRow = sources
+  const random = pseudoRandom()
+  const rows = []
   for (let l = 0; l < numRows; l++) {
     const row = makeRow(
       prevRow,
@@ -116,11 +112,11 @@ function makeDependentRows(
       framework,
       l,
       random,
-    );
-    rows.push(row);
-    prevRow = row;
+    )
+    rows.push(row)
+    prevRow = row
   }
-  return rows;
+  return rows
 }
 
 function makeRow(
@@ -133,41 +129,41 @@ function makeRow(
   random: () => number,
 ): Computed<number>[] {
   return sources.map((_, myDex) => {
-    const mySources: Computed<number>[] = [];
+    const mySources: Computed<number>[] = []
     for (let sourceDex = 0; sourceDex < nSources; sourceDex++) {
-      mySources.push(sources[(myDex + sourceDex) % sources.length]);
+      mySources.push(sources[(myDex + sourceDex) % sources.length])
     }
 
-    const staticNode = random() < staticFraction;
+    const staticNode = random() < staticFraction
     if (staticNode) {
       // static node, always reference sources
       return framework.computed(() => {
-        counter.count++;
+        counter.count++
 
-        let sum = 0;
+        let sum = 0
         for (const src of mySources) {
-          sum += src.read();
+          sum += src.read()
         }
-        return sum;
-      });
+        return sum
+      })
     } else {
       // dynamic node, drops one of the sources depending on the value of the first element
-      const first = mySources[0];
-      const tail = mySources.slice(1);
+      const first = mySources[0]
+      const tail = mySources.slice(1)
       const node = framework.computed(() => {
-        counter.count++;
-        let sum = first.read();
-        const shouldDrop = sum & 0x1;
-        const dropDex = sum % tail.length;
+        counter.count++
+        let sum = first.read()
+        const shouldDrop = sum & 0x1
+        const dropDex = sum % tail.length
 
         for (let i = 0; i < tail.length; i++) {
-          if (shouldDrop && i === dropDex) continue;
-          sum += tail[i].read();
+          if (shouldDrop && i === dropDex) continue
+          sum += tail[i].read()
         }
 
-        return sum;
-      });
-      return node;
+        return sum
+      })
+      return node
     }
-  });
+  })
 }

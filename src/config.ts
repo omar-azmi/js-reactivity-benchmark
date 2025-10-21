@@ -1,4 +1,4 @@
-import { TestConfig } from "./util/frameworkTypes";
+import type { TestConfig } from "./util/frameworkTypes.ts"
 
 export const perfTests: TestConfig[] = [
   {
@@ -73,4 +73,4 @@ export const perfTests: TestConfig[] = [
       count: 1078000,
     },
   },
-];
+]

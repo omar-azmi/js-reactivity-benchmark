@@ -1,39 +1,39 @@
-import { Counter } from "../../util/counter";
-import { Computed, ReactiveFramework } from "../../util/reactiveFramework";
-let len = 50;
+import { Counter } from "../../util/counter.ts"
+import type { Computed, ReactiveFramework } from "../../util/reactiveFramework.ts"
+let len = 50
 
 /** deep propagation */
 export function deepPropagation(bridge: ReactiveFramework) {
-  let head = bridge.signal(0);
-  let current = head as Computed<number>;
+  let head = bridge.signal(0)
+  let current = head as Computed<number>
   for (let i = 0; i < len; i++) {
-    let c = current;
+    let c = current
     current = bridge.computed(() => {
-      return c.read() + 1;
-    });
+      return c.read() + 1
+    })
   }
-  let callCounter = new Counter();
+  let callCounter = new Counter()
 
   bridge.effect(() => {
-    current.read();
-    callCounter.count++;
-  });
+    current.read()
+    callCounter.count++
+  })
 
-  const iter = 50;
+  const iter = 50
 
   return () => {
     bridge.withBatch(() => {
-      head.write(1);
-    });
-    const atleast = iter;
-    callCounter.count = 0;
+      head.write(1)
+    })
+    const atleast = iter
+    callCounter.count = 0
     for (let i = 0; i < iter; i++) {
       bridge.withBatch(() => {
-        head.write(i);
-      });
-      console.assert(current.read() === len + i);
+        head.write(i)
+      })
+      console.assert(current.read() === len + i)
     }
 
-    console.assert(callCounter.count === atleast);
-  };
+    console.assert(callCounter.count === atleast)
+  }
 }

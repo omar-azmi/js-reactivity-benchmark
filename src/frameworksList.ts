@@ -1,27 +1,27 @@
-import type { FrameworkInfo } from "./util/frameworkTypes";
-import { alienFramework } from "./frameworks/alienSignals";
-import { angularFramework as angularFramework2 } from "./frameworks/angularSignals2";
-import { compostateFramework } from "./frameworks/inactive/compostate";
-import { mobxFramework } from "./frameworks/inactive/mobx";
-import { preactSignalFramework } from "./frameworks/preactSignals";
-import { reactivelyFramework } from "./frameworks/reactively";
-import { sFramework } from "./frameworks/inactive/s";
-import { solidFramework } from "./frameworks/solid";
-import { potaFramework } from "./frameworks/pota";
-import { svelteFramework } from "./frameworks/svelte";
-import { tansuFramework } from "./frameworks/tansu";
-import { usignalFramework } from "./frameworks/inactive/uSignal";
-import { vueReactivityFramework } from "./frameworks/inactive/vueReactivity";
-import { xReactivityFramework } from "./frameworks/xReactivity";
+import { alienFramework } from "./frameworks/alienSignals.ts"
+import { angularFramework as angularFramework2 } from "./frameworks/angularSignals2.ts"
+import { compostateFramework } from "./frameworks/inactive/compostate.ts"
+import { mobxFramework } from "./frameworks/inactive/mobx.ts"
+import { sFramework } from "./frameworks/inactive/s.ts"
+import { usignalFramework } from "./frameworks/inactive/uSignal.ts"
+import { vueReactivityFramework } from "./frameworks/inactive/vueReactivity.ts"
+import { potaFramework } from "./frameworks/pota.ts"
+import { preactSignalFramework } from "./frameworks/preactSignals.ts"
+import { reactivelyFramework } from "./frameworks/reactively.ts"
+import { solidFramework } from "./frameworks/solid.ts"
+import { svelteFramework } from "./frameworks/svelte.ts"
+import { tansuFramework } from "./frameworks/tansu.ts"
+import { xReactivityFramework } from "./frameworks/xReactivity.ts"
+import type { FrameworkInfo } from "./util/frameworkTypes.ts"
 
 // Currently failing kairoBench tests
-// import { molWireFramework } from "./frameworks/molWire";
+// import { molWireFramework } from "./frameworks/molWire.ts"
 
 // Disabled until cleanup performance is fixed
-// import { tc39SignalsFramework } from "./frameworks/tc39signals";
+// import { tc39SignalsFramework } from "./frameworks/tc39signals.ts"
 
 // Currently failing cellx tests
-// import { obyFramework } from "./frameworks/inactive/oby";
+// import { obyFramework } from "./frameworks/inactive/oby.ts"
 
 export const frameworkInfo: FrameworkInfo[] = [
   { framework: alienFramework, testPullCounts: true },
@@ -37,7 +37,7 @@ export const frameworkInfo: FrameworkInfo[] = [
   { framework: tansuFramework, testPullCounts: true },
   { framework: vueReactivityFramework, testPullCounts: true },
   { framework: xReactivityFramework, testPullCounts: true },
-];
+]
 
 export const allFrameworks: FrameworkInfo[] = [
   { framework: alienFramework, testPullCounts: true },
@@ -57,4 +57,4 @@ export const allFrameworks: FrameworkInfo[] = [
   { framework: usignalFramework, testPullCounts: true },
   { framework: vueReactivityFramework, testPullCounts: true },
   { framework: xReactivityFramework, testPullCounts: true },
-];
+]

@@ -1,6 +1,5 @@
-import { ReactiveFramework } from "../util/reactiveFramework";
-// @ts-ignore
-import * as $ from "svelte/internal/client";
+import * as $ from "svelte/internal/client"
+import type { ReactiveFramework } from "../util/reactiveFramework.ts"
 
 // NOTE: The svelte adapter uses private, internal APIs that are usually only
 // used by the Svelte compiler and client runtime. The Svelte team has made the
@@ -13,28 +12,28 @@ import * as $ from "svelte/internal/client";
 export const svelteFramework: ReactiveFramework = {
   name: "Svelte v5",
   signal: (initialValue) => {
-    const s = $.state(initialValue);
+    const s = $.state(initialValue)
     return {
       write: (v) => $.set(s, v),
       read: () => $.get(s),
-    };
+    }
   },
   computed: (fn) => {
-    const c = $.derived(fn);
+    const c = $.derived(fn)
     return {
       read: () => $.get(c),
-    };
+    }
   },
   effect: (fn) => {
-    $.render_effect(fn);
+    $.render_effect(fn)
   },
   withBatch: (fn) => $.flush(fn),
   withBuild: <T>(fn: () => T): T => {
-    let res: T | undefined;
+    let res: T | undefined
     svelteFramework.cleanup = $.effect_root(() => {
-      res = fn();
-    });
-    return res!;
+      res = fn()
+    })
+    return res!
   },
-  cleanup: () => {},
-};
+  cleanup: () => { },
+}

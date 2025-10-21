@@ -1,20 +1,23 @@
-import { makeGraph, runGraph } from "./dependencyGraph";
-import { verifyBenchResult } from "../../util/perfTests";
-import { FrameworkInfo, TestConfig } from "../../util/frameworkTypes";
-import { perfTests } from "../../config";
-import { fastestTest } from "../../util/benchRepeat";
-import { PerfResultCallback } from "../../util/perfLogging";
-import { nextTick } from "../../util/asyncUtil";
+import { perfTests } from "../../config.ts"
+import { nextTick } from "../../util/asyncUtil.ts"
+import { fastestTest } from "../../util/benchRepeat.ts"
+import type { FrameworkInfo, TestConfig } from "../../util/frameworkTypes.ts"
+import type { PerfResultCallback } from "../../util/perfLogging.ts"
+import { verifyBenchResult } from "../../util/perfTests.ts"
+import { makeGraph, runGraph } from "./dependencyGraph.ts"
+
+declare const gc: () => void
+declare namespace globalThis { var gc: (() => void) | undefined }
 
 function percent(n: number): string {
-  return Math.round(n * 100) + "%";
+  return Math.round(n * 100) + "%"
 }
 
 export function makeTitle(config: TestConfig): string {
-  const { width, totalLayers, staticFraction, nSources, readFraction } = config;
-  const dyn = staticFraction < 1 ? " - dyn" + percent(1 - staticFraction) : "";
-  const read = readFraction < 1 ? ` - lazy${percent(1 - readFraction)}` : "";
-  return `${nSources}-${width}x${totalLayers}${dyn}${read}`;
+  const { width, totalLayers, staticFraction, nSources, readFraction } = config
+  const dyn = staticFraction < 1 ? " - dyn" + percent(1 - staticFraction) : ""
+  const read = readFraction < 1 ? ` - lazy${percent(1 - readFraction)}` : ""
+  return `${nSources}-${width}x${totalLayers}${dyn}${read}`
 }
 
 /** benchmark a single test under single framework.
@@ -27,37 +30,37 @@ export async function dynamicBench(
 ): Promise<void> {
   for (const config of perfTests) {
     for (const frameworkTest of frameworkInfo) {
-      const { framework } = frameworkTest;
-      const { iterations, readFraction } = config;
+      const { framework } = frameworkTest
+      const { iterations, readFraction } = config
 
-      const { graph, counter } = makeGraph(framework, readFraction, config);
+      const { graph, counter } = makeGraph(framework, readFraction, config)
 
       function runOnce(): number {
-        return runGraph(graph, iterations, framework);
+        return runGraph(graph, iterations, framework)
       }
 
       // warm up
-      runOnce();
-      runOnce();
+      runOnce()
+      runOnce()
 
-      await nextTick();
-      runOnce();
+      await nextTick()
+      runOnce()
 
       const timedResult = await fastestTest(testRepeats, () => {
-        counter.count = 0;
-        const sum = runOnce();
-        return { sum, count: counter.count };
-      });
+        counter.count = 0
+        const sum = runOnce()
+        return { sum, count: counter.count }
+      })
 
-      framework.cleanup();
-      if (globalThis.gc) (gc!(), gc!());
+      framework.cleanup()
+      if (globalThis.gc) (gc!(), gc!())
 
       logPerfResult({
         framework: framework.name,
         test: makeTitle(config) + (config.name ? ` (${config.name})` : ""),
         time: timedResult.time,
-      });
-      verifyBenchResult(frameworkTest, config, timedResult);
+      })
+      verifyBenchResult(frameworkTest, config, timedResult)
     }
   }
 }

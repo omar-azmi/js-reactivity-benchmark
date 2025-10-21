@@ -1,38 +1,34 @@
-import { dynamicBench } from "./benches/reactively/dynamicBench";
-import { cellxbench } from "./benches/cellxBench";
-import { sbench } from "./benches/sBench";
-import { kairoBench } from "./benches/kairoBench";
-import { promiseDelay } from "./util/asyncUtil";
-import type { FrameworkInfo } from "./util/frameworkTypes";
-import { PerfResultCallback } from "./util/perfLogging";
+import { cellxbench } from "./benches/cellxBench.ts"
+import { kairoBench } from "./benches/kairoBench.ts"
+import { dynamicBench } from "./benches/reactively/dynamicBench.ts"
+import { sbench } from "./benches/sBench.ts"
+import { promiseDelay } from "./util/asyncUtil.ts"
+import type { FrameworkInfo } from "./util/frameworkTypes.ts"
+import type { PerfResultCallback } from "./util/perfLogging.ts"
 
-export type { ReactiveFramework } from "./util/reactiveFramework";
+export { allFrameworks, frameworkInfo } from ".//frameworksList.ts"
 export {
-  perfResultHeaders,
-  formatPerfResult,
-  type PerfResult,
-  type PerfResultStrings,
-  type PerfResultCallback,
-} from "./util/perfLogging";
-export { frameworkInfo, allFrameworks } from ".//frameworksList";
-export type { FrameworkInfo };
+    formatPerfResult, perfResultHeaders, type PerfResult, type PerfResultCallback, type PerfResultStrings
+} from "./util/perfLogging.ts"
+export type { ReactiveFramework } from "./util/reactiveFramework.ts"
+export type { FrameworkInfo }
 
 export async function runTests(
   frameworkInfo: FrameworkInfo[],
   logPerfResult: PerfResultCallback,
 ) {
-  await promiseDelay(0);
+  await promiseDelay(0)
 
   for (const { framework } of frameworkInfo) {
-    await sbench(framework, logPerfResult);
-    await promiseDelay(1000);
+    await sbench(framework, logPerfResult)
+    await promiseDelay(1000)
   }
 
-  await kairoBench(frameworkInfo, logPerfResult);
+  await kairoBench(frameworkInfo, logPerfResult)
 
-  await cellxbench(frameworkInfo, logPerfResult);
-  await promiseDelay(1000);
+  await cellxbench(frameworkInfo, logPerfResult)
+  await promiseDelay(1000)
 
-  await dynamicBench(frameworkInfo, logPerfResult);
-  await promiseDelay(1000);
+  await dynamicBench(frameworkInfo, logPerfResult)
+  await promiseDelay(1000)
 }

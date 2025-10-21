@@ -1,45 +1,38 @@
-import {
-  computed,
-  effect,
-  endBatch,
-  signal,
-  startBatch,
-  effectScope,
-} from "alien-signals/esm";
-import { ReactiveFramework } from "../util/reactiveFramework";
+import { computed, effect, effectScope, endBatch, signal, startBatch } from "alien-signals/esm"
+import type { ReactiveFramework } from "../util/reactiveFramework.ts"
 
-let scope: (() => void) | null = null;
+let scope: (() => void) | null = null
 
 export const alienFramework: ReactiveFramework = {
   name: "Alien Signals",
   signal: (initial) => {
-    const data = signal(initial);
+    const data = signal(initial)
     return {
       read: () => data(),
       write: (v) => data(v),
-    };
+    }
   },
   computed: (fn) => {
-    const c = computed(fn);
+    const c = computed(fn)
     return {
       read: () => c(),
-    };
+    }
   },
   effect: (fn) => effect(fn),
   withBatch: (fn) => {
-    startBatch();
-    fn();
-    endBatch();
+    startBatch()
+    fn()
+    endBatch()
   },
   withBuild: <T>(fn: () => T) => {
-    let out!: T;
+    let out!: T
     scope = effectScope(() => {
-      out = fn();
-    });
-    return out;
+      out = fn()
+    })
+    return out
   },
   cleanup: () => {
-    scope!();
-    scope = null;
+    scope!()
+    scope = null
   },
-};
+}
