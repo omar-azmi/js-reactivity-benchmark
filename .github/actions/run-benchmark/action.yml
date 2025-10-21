@@ -1,0 +1,13 @@
+name: action-run-benchmark
+description: "run the benchmark on github actions... because why not?"
+
+runs:
+  using: composite
+  steps:
+    - name: deno-esbuild bundle-source-to-js
+      shell: bash
+      run: deno run -A "jsr:@oazmi/build-tools@0.3.0/cli/dist" --config="./deno.json" --minify -i="./scripts/run_benchmark.ts" --dir="./dist/"
+
+    - name: deno-run benchmark
+      shell: bash
+      run: deno run --allow-env=NODE_ENV "./dist/run_benchmark.js"

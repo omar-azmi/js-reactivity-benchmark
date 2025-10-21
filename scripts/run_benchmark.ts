@@ -19,4 +19,4 @@ async function main() {
   await runTests(frameworkInfo, logPerfResult)
 }
 
-main()
+await main()

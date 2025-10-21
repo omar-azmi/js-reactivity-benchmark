@@ -1,0 +1,13 @@
+name: build-all
+
+on: ["workflow_dispatch", "workflow_call"]
+
+permissions:
+  contents: write
+
+jobs:
+  build-web:
+    uses: ./.github/workflows/build-web.yml
+  
+  run-benchmark:
+    uses: ./.github/workflows/run-benchmark.yml

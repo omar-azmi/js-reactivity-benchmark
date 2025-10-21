@@ -1,0 +1,15 @@
+name: action-build-web
+description: "builds the web-distribution folder (`web-dist`) and commits it to the github pages branch"
+
+runs:
+  using: composite
+  steps:
+    - name: deno-task build-web
+      shell: bash
+      run: deno task build-web
+
+    - name: deploy github pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        folder: web-dist
